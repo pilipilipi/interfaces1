@@ -17,6 +17,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JCheckBox;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import java.awt.Color;
 
 public class VentaOrdenadores extends JFrame implements ActionListener {
 
@@ -220,22 +221,27 @@ public class VentaOrdenadores extends JFrame implements ActionListener {
 		contentPane.add(o4);
 		
 		JButton añadir = new JButton("Añadir");
+		añadir.setForeground(new Color(255, 0, 128));
 		añadir.setBounds(6, 251, 89, 23);
 		contentPane.add(añadir);
 		
 		JButton buscar = new JButton("Buscar");
+		buscar.setForeground(new Color(0, 128, 255));
 		buscar.setBounds(106, 251, 89, 23);
 		contentPane.add(buscar);
 		
 		JButton eliminar = new JButton("Eliminar");
+		eliminar.setForeground(new Color(0, 255, 64));
 		eliminar.setBounds(218, 251, 89, 23);
 		contentPane.add(eliminar);
 		
 		JButton cancelar = new JButton("Cancelar");
+		cancelar.setForeground(new Color(200, 73, 254));
 		cancelar.setBounds(408, 251, 89, 23);
 		contentPane.add(cancelar);
 		
 		JButton salir = new JButton("Salir");
+		salir.setForeground(new Color(255, 128, 0));
 		salir.setBounds(408, 285, 89, 23);
 		contentPane.add(salir);
 		
@@ -251,6 +257,8 @@ public class VentaOrdenadores extends JFrame implements ActionListener {
 		
 		escribirNombre.addActionListener(añade);
 		añadir.addActionListener(añade);
+		
+//		activar y desactivar con setenabled
 	}
 
 	@Override
