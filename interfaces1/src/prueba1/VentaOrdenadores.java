@@ -143,15 +143,15 @@ public class VentaOrdenadores extends JFrame implements ActionListener {
 		contentPane.add(m1);
 		
 		JRadioButton m2 = new JRadioButton("P4 3.2 Gb");
-		m2.setBounds(106, 154, 75, 23); // +26 píxeles en Y
+		m2.setBounds(106, 154, 75, 23); 
 		contentPane.add(m2);
 
 		JRadioButton m3 = new JRadioButton("P4 Celeron");
-		m3.setBounds(106, 180, 77, 23); // +26 píxeles en Y
+		m3.setBounds(106, 180, 77, 23); 
 		contentPane.add(m3);
 
 		JRadioButton m4 = new JRadioButton("AMD 650");
-		m4.setBounds(106, 206, 75, 23); // +26 píxeles en Y
+		m4.setBounds(106, 206, 75, 23);
 		contentPane.add(m4);
 		
 		ButtonGroup grupoMemoria = new ButtonGroup();
