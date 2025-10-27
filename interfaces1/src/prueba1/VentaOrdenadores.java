@@ -58,6 +58,7 @@ public class VentaOrdenadores extends JFrame implements ActionListener {
 		contentPane.add(nombreCliente);
 		
 		escribirNombre = new JTextField();
+		escribirNombre.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		escribirNombre.setBounds(106, 8, 86, 20);
 		contentPane.add(escribirNombre);
 		escribirNombre.setColumns(10);
