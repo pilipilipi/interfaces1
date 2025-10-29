@@ -64,20 +64,20 @@ public class PruebaLayout3 extends JFrame {
 			} else {
 				boton.setBackground(Color.magenta);
 			}
-			
-			if(ganador()) {
-				if(!turno) {
+
+			if (ganador()) {
+				if (!turno) {
 					JOptionPane.showMessageDialog(null, "Rojo gana!");
-					
+					System.exit(0);
+
 				} else {
 					JOptionPane.showMessageDialog(null, "Azul gana!");
+					System.exit(0);
 				}
 			}
-			
-			turno = !turno;	
-		};
 
-		
+			turno = !turno;
+		};
 
 		for (int i = 0; i < 9; i++) {
 			botones[i] = new JButton();
@@ -90,29 +90,26 @@ public class PruebaLayout3 extends JFrame {
 			botones[i].addActionListener(cambia);
 			contentPane.add(botones[i]);
 		}
-		
+
 	}
-	
+
 	public boolean ganador() {
-		
-		int combinaciones[][] = {
-				{0, 1, 2}, {3, 4, 5}, {6, 7, 8},
-				{0, 3, 6}, {1, 4, 7}, {2, 5, 8},
-				{0, 4, 8}, {2, 4, 6}
-		};
-		
-		for(int[]x : combinaciones) {
-			
+
+		int combinaciones[][] = { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 },
+				{ 0, 4, 8 }, { 2, 4, 6 } };
+
+		for (int[] x : combinaciones) {
+
 			Color a = botones[x[0]].getBackground();
 			Color b = botones[x[1]].getBackground();
-			Color c = botones[x[2]].getBackground();	
-			
-			if(!a.equals(Color.gray) && a.equals(b) && a.equals(c)) {
+			Color c = botones[x[2]].getBackground();
+
+			if (!a.equals(Color.gray) && a.equals(b) && a.equals(c)) {
 				return true;
 			}
 		}
-		
-		return false;		
+
+		return false;
 	}
 
 }
