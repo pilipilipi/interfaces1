@@ -1,0 +1,30 @@
+package windowBuilder;
+
+public class Venta {
+    private String nombre, localidad, procesador, memoria, monitor, disco;
+    private boolean dvd, wifi, tv, backup;
+
+    public Venta(String n, String l, String p, String m, String mo, String d, boolean dvd, boolean wifi, boolean tv, boolean backup) {
+        this.nombre = n;
+        this.localidad = l;
+        this.procesador = p;
+        this.memoria = m;
+        this.monitor = mo;
+        this.disco = d;
+        this.dvd = dvd;
+        this.wifi = wifi;
+        this.tv = tv;
+        this.backup = backup;
+    }
+
+    public String getNombre() { return nombre; }
+    public String getLocalidad() { return localidad; }
+    public String getProcesador() { return procesador; }
+    public String getMemoria() { return memoria; }
+    public String getMonitor() { return monitor; }
+    public String getDisco() { return disco; }
+    public boolean isDvd() { return dvd; }
+    public boolean isWifi() { return wifi; }
+    public boolean isTv() { return tv; }
+    public boolean isBackup() { return backup; }
+}
