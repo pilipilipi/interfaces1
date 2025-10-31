@@ -1,271 +1,349 @@
-package prueba1;
+package windowBuilder;
 
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
-import javax.swing.JComboBox;
-import java.awt.Font;
-import javax.swing.JRadioButton;
-import javax.swing.JCheckBox;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import java.awt.Color;
 
 public class VentaOrdenadores extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField escribirNombre;
+	private JComboBox<String> comboBox;
+	private JList<String> listaClientes;
+	private DefaultListModel<String> modeloLista;
 
-	/**
-	 * Launch the application.
-	 */
+	// Grupos de radio buttons
+	private ButtonGroup grupoProcesadores, grupoMemoria, grupoMonitor, grupoDisco;
+	private JRadioButton p1, p2, p3, p4, m1, m2, m3, m4, mn1, mn2, mn3, mn4, d1, d2, d3, d4;
+	private JCheckBox o1, o2, o3, o4;
+	private JButton añadir, buscar, eliminar, cancelar, salir;
+
+	// Vector de ventas
+	private ArrayList<Venta> ventas = new ArrayList<>();
+
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentaOrdenadores frame = new VentaOrdenadores();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				VentaOrdenadores frame = new VentaOrdenadores();
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public VentaOrdenadores() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 537, 355);
+		setTitle("Ventas de ordenadores");
+		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JLabel nombreCliente = new JLabel("Nombre del Cliente");
-		nombreCliente.setHorizontalAlignment(SwingConstants.LEFT);
-		nombreCliente.setBounds(6, 11, 100, 14);
+
+		JLabel nombreCliente = new JLabel("Nombre del cliente:");
+		nombreCliente.setBounds(10, 10, 150, 20);
 		contentPane.add(nombreCliente);
-		
+
 		escribirNombre = new JTextField();
-		escribirNombre.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		escribirNombre.setBounds(106, 8, 86, 20);
+		escribirNombre.setBounds(140, 10, 150, 22);
+		escribirNombre.setColumns(15);
 		contentPane.add(escribirNombre);
-		escribirNombre.setColumns(10);
-		
-		JLabel lblListaDeClientes = new JLabel("Lista de Clientes");
-		lblListaDeClientes.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblListaDeClientes.setBounds(208, 14, 109, 14);
-		contentPane.add(lblListaDeClientes);
-		
-		JTextArea textLista = new JTextArea();
-		textLista.setBounds(327, 11, 170, 69);
-		contentPane.add(textLista);
-		
-		JLabel Localidad = new JLabel("Localidad");
-		Localidad.setHorizontalAlignment(SwingConstants.LEFT);
-		Localidad.setBounds(6, 40, 68, 14);
-		contentPane.add(Localidad);
-		
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(106, 36, 75, 22);
+
+		JLabel lblLocalidad = new JLabel("Localidad:");
+		lblLocalidad.setBounds(10, 40, 80, 20);
+		contentPane.add(lblLocalidad);
+
+		comboBox = new JComboBox<>();
+		comboBox.addItem("Villalba");
+		comboBox.addItem("Alpedrete");
+		comboBox.addItem("Galapagar");
+		comboBox.addItem("Guadarrama");
+		comboBox.addItem("Moralzarzal");
+		comboBox.setBounds(140, 40, 120, 22);
 		contentPane.add(comboBox);
-		comboBox.addItem("Madrid");
-        comboBox.addItem("Barcelona");
-        comboBox.addItem("Valencia");
-        comboBox.addItem("Sevilla");
-        comboBox.addItem("Bilbao");
-        comboBox.addActionListener(this);
-		
+
+		JLabel lblLista = new JLabel("Lista de clientes:");
+		lblLista.setBounds(350, 10, 120, 20);
+		contentPane.add(lblLista);
+
+		modeloLista = new DefaultListModel<>();
+		listaClientes = new JList<>(modeloLista);
+		JScrollPane scroll = new JScrollPane(listaClientes);
+		scroll.setBounds(450, 10, 120, 100);
+		contentPane.add(scroll);
+
+		// Secciones
 		JLabel procesador = new JLabel("Procesador");
 		procesador.setFont(new Font("Tahoma", Font.BOLD, 11));
-		procesador.setHorizontalAlignment(SwingConstants.LEFT);
-		procesador.setBounds(10, 104, 64, 14);
+		procesador.setBounds(10, 80, 100, 14);
 		contentPane.add(procesador);
-		
-		JLabel memoria = new JLabel("Memoria");
-		memoria.setHorizontalAlignment(SwingConstants.LEFT);
-		memoria.setFont(new Font("Tahoma", Font.BOLD, 11));
-		memoria.setBounds(120, 104, 54, 14);
-		contentPane.add(memoria);
-		
-		JLabel monitor = new JLabel("Monitor");
-		monitor.setHorizontalAlignment(SwingConstants.LEFT);
-		monitor.setFont(new Font("Tahoma", Font.BOLD, 11));
-		monitor.setBounds(218, 104, 44, 14);
-		contentPane.add(monitor);
-		
-		JLabel discoDuro = new JLabel("Disco Duro");
-		discoDuro.setHorizontalAlignment(SwingConstants.LEFT);
-		discoDuro.setFont(new Font("Tahoma", Font.BOLD, 11));
-		discoDuro.setBounds(304, 104, 64, 14);
-		contentPane.add(discoDuro);
-		
-		JLabel opciones = new JLabel("Opciones");
-		opciones.setHorizontalAlignment(SwingConstants.LEFT);
-		opciones.setFont(new Font("Tahoma", Font.BOLD, 11));
-		opciones.setBounds(411, 104, 64, 14);
-		contentPane.add(opciones);
-		
-		JRadioButton p1 = new JRadioButton("P4 3.0 Gb");
-		p1.setBounds(6, 128, 75, 23);
-		contentPane.add(p1);
-		
-		JRadioButton p2 = new JRadioButton("P4 3.2 Gb");
-		p2.setBounds(6, 154, 86, 23);
-		contentPane.add(p2);
 
-		JRadioButton p3 = new JRadioButton("P4 Celeron");
-		p3.setBounds(6, 180, 86, 23);
-		contentPane.add(p3);
-		
-		JRadioButton p4 = new JRadioButton("AMD 650");
-		p4.setBounds(6, 206, 75, 23);
-		contentPane.add(p4);
-		
-		ButtonGroup grupoProcesadores = new ButtonGroup();
+		p1 = new JRadioButton("P4 3.0 Gb");
+		p2 = new JRadioButton("P4 3.2 Gb");
+		p3 = new JRadioButton("P4 Celeron");
+		p4 = new JRadioButton("AMD 650");
+		grupoProcesadores = new ButtonGroup();
 		grupoProcesadores.add(p1);
 		grupoProcesadores.add(p2);
 		grupoProcesadores.add(p3);
 		grupoProcesadores.add(p4);
-		
-		JRadioButton m1 = new JRadioButton("128 Mb");
-		m1.setBounds(106, 128, 69, 23);
-		contentPane.add(m1);
-		
-		JRadioButton m2 = new JRadioButton("P4 3.2 Gb");
-		m2.setBounds(106, 154, 75, 23); 
-		contentPane.add(m2);
+		p1.setBounds(10, 100, 100, 23);
+		p2.setBounds(10, 120, 100, 23);
+		p3.setBounds(10, 140, 100, 23);
+		p4.setBounds(10, 160, 100, 23);
+		contentPane.add(p1);
+		contentPane.add(p2);
+		contentPane.add(p3);
+		contentPane.add(p4);
 
-		JRadioButton m3 = new JRadioButton("P4 Celeron");
-		m3.setBounds(106, 180, 77, 23); 
-		contentPane.add(m3);
+		JLabel memoria = new JLabel("Memoria");
+		memoria.setFont(new Font("Tahoma", Font.BOLD, 11));
+		memoria.setBounds(120, 80, 100, 14);
+		contentPane.add(memoria);
 
-		JRadioButton m4 = new JRadioButton("AMD 650");
-		m4.setBounds(106, 206, 75, 23);
-		contentPane.add(m4);
-		
-		ButtonGroup grupoMemoria = new ButtonGroup();
+		m1 = new JRadioButton("128 Mb");
+		m2 = new JRadioButton("256 Mb");
+		m3 = new JRadioButton("512 Mb");
+		m4 = new JRadioButton("1024 Mb");
+		grupoMemoria = new ButtonGroup();
 		grupoMemoria.add(m1);
 		grupoMemoria.add(m2);
 		grupoMemoria.add(m3);
 		grupoMemoria.add(m4);
-		
-		JRadioButton mn1 = new JRadioButton("15\"");
-		mn1.setBounds(197, 128, 69, 23);
-		contentPane.add(mn1);
-		
-		JRadioButton mn2 = new JRadioButton("17\"");
-		mn2.setBounds(197, 154, 75, 23);
-		contentPane.add(mn2);
-		
-		JRadioButton mn3 = new JRadioButton("TFT 15\"");
-		mn3.setBounds(197, 180, 77, 23);
-		contentPane.add(mn3);
-		
-		JRadioButton mn4 = new JRadioButton("TFT 17\"");
-		mn4.setBounds(197, 206, 75, 23);
-		contentPane.add(mn4);
-		
-		ButtonGroup grupoMonitor = new ButtonGroup();
+		m1.setBounds(120, 100, 100, 23);
+		m2.setBounds(120, 120, 100, 23);
+		m3.setBounds(120, 140, 100, 23);
+		m4.setBounds(120, 160, 100, 23);
+		contentPane.add(m1);
+		contentPane.add(m2);
+		contentPane.add(m3);
+		contentPane.add(m4);
+
+		JLabel monitor = new JLabel("Monitor");
+		monitor.setFont(new Font("Tahoma", Font.BOLD, 11));
+		monitor.setBounds(230, 80, 100, 14);
+		contentPane.add(monitor);
+
+		mn1 = new JRadioButton("15\"");
+		mn2 = new JRadioButton("17\"");
+		mn3 = new JRadioButton("TFT 15\"");
+		mn4 = new JRadioButton("TFT 17\"");
+		grupoMonitor = new ButtonGroup();
 		grupoMonitor.add(mn1);
 		grupoMonitor.add(mn2);
 		grupoMonitor.add(mn3);
 		grupoMonitor.add(mn4);
-		
-		JRadioButton d1 = new JRadioButton("60 Gb");
-		d1.setBounds(304, 125, 69, 23);
-		contentPane.add(d1);
-		
-		JRadioButton d2 = new JRadioButton("80 Gb");
-		d2.setBounds(304, 151, 75, 23);
-		contentPane.add(d2);
-		
-		JRadioButton d3 = new JRadioButton("120 Gb");
-		d3.setBounds(304, 177, 64, 23);
-		contentPane.add(d3);
-		
-		JRadioButton d4 = new JRadioButton("200 Gb");
-		d4.setBounds(304, 203, 64, 23);
-		contentPane.add(d4);
-		
-		ButtonGroup grupoDisco = new ButtonGroup();
+		mn1.setBounds(230, 100, 100, 23);
+		mn2.setBounds(230, 120, 100, 23);
+		mn3.setBounds(230, 140, 100, 23);
+		mn4.setBounds(230, 160, 100, 23);
+		contentPane.add(mn1);
+		contentPane.add(mn2);
+		contentPane.add(mn3);
+		contentPane.add(mn4);
+
+		JLabel disco = new JLabel("Disco duro");
+		disco.setFont(new Font("Tahoma", Font.BOLD, 11));
+		disco.setBounds(340, 80, 100, 14);
+		contentPane.add(disco);
+
+		d1 = new JRadioButton("60 Gb");
+		d2 = new JRadioButton("80 Gb");
+		d3 = new JRadioButton("120 Gb");
+		d4 = new JRadioButton("200 Gb");
+		grupoDisco = new ButtonGroup();
 		grupoDisco.add(d1);
 		grupoDisco.add(d2);
 		grupoDisco.add(d3);
 		grupoDisco.add(d4);
-		
-		JCheckBox o1 = new JCheckBox("Grabadora DVD");
-		o1.setBounds(375, 125, 126, 23);
+		d1.setBounds(340, 100, 100, 23);
+		d2.setBounds(340, 120, 100, 23);
+		d3.setBounds(340, 140, 100, 23);
+		d4.setBounds(340, 160, 100, 23);
+		contentPane.add(d1);
+		contentPane.add(d2);
+		contentPane.add(d3);
+		contentPane.add(d4);
+
+		JLabel opciones = new JLabel("Opciones");
+		opciones.setFont(new Font("Tahoma", Font.BOLD, 11));
+		opciones.setBounds(450, 120, 100, 14);
+		contentPane.add(opciones);
+
+		o1 = new JCheckBox("Grabadora DVD");
+		o2 = new JCheckBox("Wifi");
+		o3 = new JCheckBox("Sintonizador TV");
+		o4 = new JCheckBox("Backup/Restore");
+		o1.setBounds(450, 140, 150, 23);
+		o2.setBounds(450, 160, 150, 23);
+		o3.setBounds(450, 180, 150, 23);
+		o4.setBounds(450, 200, 150, 23);
 		contentPane.add(o1);
-		
-		JCheckBox o2 = new JCheckBox("Wifi");
-		o2.setBounds(375, 154, 126, 23);
 		contentPane.add(o2);
-		
-		JCheckBox o3 = new JCheckBox("Sincronizador TV");
-		o3.setBounds(375, 180, 126, 23);
 		contentPane.add(o3);
-		
-		JCheckBox o4 = new JCheckBox("Grabadora DVD");
-		o4.setBounds(375, 206, 126, 23);
 		contentPane.add(o4);
-		
-		JButton añadir = new JButton("Añadir");
-		añadir.setForeground(new Color(255, 0, 128));
-		añadir.setBounds(6, 251, 89, 23);
+
+		añadir = new JButton("Añadir");
+		añadir.setBounds(50, 250, 100, 25);
+		buscar = new JButton("Buscar");
+		buscar.setBounds(160, 250, 100, 25);
+		eliminar = new JButton("Eliminar");
+		eliminar.setBounds(270, 250, 100, 25);
+		cancelar = new JButton("Cancelar");
+		cancelar.setBounds(380, 250, 100, 25);
+		salir = new JButton("Salir");
+		salir.setBounds(490, 250, 80, 25);
+
 		contentPane.add(añadir);
-		
-		JButton buscar = new JButton("Buscar");
-		buscar.setForeground(new Color(0, 128, 255));
-		buscar.setBounds(106, 251, 89, 23);
 		contentPane.add(buscar);
-		
-		JButton eliminar = new JButton("Eliminar");
-		eliminar.setForeground(new Color(0, 255, 64));
-		eliminar.setBounds(218, 251, 89, 23);
 		contentPane.add(eliminar);
-		
-		JButton cancelar = new JButton("Cancelar");
-		cancelar.setForeground(new Color(200, 73, 254));
-		cancelar.setBounds(408, 251, 89, 23);
 		contentPane.add(cancelar);
-		
-		JButton salir = new JButton("Salir");
-		salir.setForeground(new Color(255, 128, 0));
-		salir.setBounds(408, 285, 89, 23);
 		contentPane.add(salir);
-		
-		
-		//escribir lo del textfield al textarea
-		ActionListener añade = e -> {
-		    String texto = escribirNombre.getText();
-		    if (!texto.isEmpty()) {
-		        textLista.append(texto + "\n");
-		        escribirNombre.setText("");
-		    }
-		};
-		
-		escribirNombre.addActionListener(añade);
-		añadir.addActionListener(añade);
-		
-//		activar y desactivar con setenabled
+
+		// Acciones
+		escribirNombre.addActionListener(this);
+		añadir.addActionListener(this);
+		buscar.addActionListener(this);
+		eliminar.addActionListener(this);
+		cancelar.addActionListener(this);
+		salir.addActionListener(e -> System.exit(0));
+		listaClientes.addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting())
+				activarEliminar();
+		});
+
+		estadoInicial();
+	}
+
+	private void estadoInicial() {
+		escribirNombre.setText("");
+		escribirNombre.requestFocus();
+		comboBox.setEnabled(false);
+		setGrupoEnabled(false);
+		añadir.setEnabled(false);
+		buscar.setEnabled(false);
+		eliminar.setEnabled(false);
+		cancelar.setEnabled(true);
+	}
+
+	private void setGrupoEnabled(boolean enabled) {
+		for (Component c : contentPane.getComponents()) {
+			if (c instanceof JRadioButton || c instanceof JCheckBox || c == comboBox)
+				c.setEnabled(enabled);
+		}
+	}
+
+	private void activarEliminar() {
+		if (!listaClientes.isSelectionEmpty()) {
+			eliminar.setEnabled(true);
+			añadir.setEnabled(false);
+			buscar.setEnabled(false);
+		}
+	}
+
+	private void configurarEstandar() {
+		p2.setSelected(true);
+		m4.setSelected(true);
+		mn4.setSelected(true);
+		d4.setSelected(true);
+		o1.setSelected(true);
+		o2.setSelected(true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		
-		
+		Object src = e.getSource();
+
+		if (src == escribirNombre) {
+			String nombre = escribirNombre.getText().trim();
+			if (!nombre.isEmpty()) {
+				comboBox.setEnabled(true);
+				setGrupoEnabled(true);
+				configurarEstandar();
+				añadir.setEnabled(true);
+				buscar.setEnabled(true);
+				comboBox.requestFocus();
+			}
+		} else if (src == añadir) {
+			String nombre = escribirNombre.getText().trim();
+			if (!nombre.isEmpty()) {
+				modeloLista.addElement(nombre);
+				ventas.add(crearVenta(nombre));
+				estadoInicial();
+			}
+		} else if (src == buscar) {
+			String nombre = escribirNombre.getText().trim();
+			boolean encontrado = false;
+			for (Venta v : ventas) {
+				if (v.getNombre().equalsIgnoreCase(nombre)) {
+					mostrarVenta(v);
+					encontrado = true;
+					break;
+				}
+			}
+			if (!encontrado)
+				JOptionPane.showMessageDialog(this, "No se encontró ninguna venta para ese cliente.");
+		} else if (src == eliminar) {
+			String nombre = listaClientes.getSelectedValue();
+			if (nombre != null) {
+				int r = JOptionPane.showConfirmDialog(this, "¿Eliminar la venta de " + nombre + "?", "Confirmar",
+						JOptionPane.YES_NO_OPTION);
+				if (r == JOptionPane.YES_OPTION) {
+					modeloLista.removeElement(nombre);
+					ventas.removeIf(v -> v.getNombre().equalsIgnoreCase(nombre));
+					estadoInicial();
+				}
+			}
+		} else if (src == cancelar) {
+			estadoInicial();
+		}
+	}
+
+	private Venta crearVenta(String nombre) {
+		String localidad = (String) comboBox.getSelectedItem();
+		String proc = getSeleccionado(grupoProcesadores);
+		String mem = getSeleccionado(grupoMemoria);
+		String mon = getSeleccionado(grupoMonitor);
+		String dd = getSeleccionado(grupoDisco);
+		boolean dvd = o1.isSelected(), wifi = o2.isSelected(), tv = o3.isSelected(), backup = o4.isSelected();
+		return new Venta(nombre, localidad, proc, mem, mon, dd, dvd, wifi, tv, backup);
+	}
+
+	private void mostrarVenta(Venta v) {
+		escribirNombre.setText(v.getNombre());
+		comboBox.setSelectedItem(v.getLocalidad());
+		seleccionarRadio(grupoProcesadores, v.getProcesador());
+		seleccionarRadio(grupoMemoria, v.getMemoria());
+		seleccionarRadio(grupoMonitor, v.getMonitor());
+		seleccionarRadio(grupoDisco, v.getDisco());
+		o1.setSelected(v.isDvd());
+		o2.setSelected(v.isWifi());
+		o3.setSelected(v.isTv());
+		o4.setSelected(v.isBackup());
+	}
+
+	private String getSeleccionado(ButtonGroup g) {
+		for (Enumeration<AbstractButton> e = g.getElements(); e.hasMoreElements();) {
+			AbstractButton b = e.nextElement();
+			if (b.isSelected())
+				return b.getText();
+		}
+		return "";
+	}
+
+	private void seleccionarRadio(ButtonGroup g, String texto) {
+		for (Enumeration<AbstractButton> e = g.getElements(); e.hasMoreElements();) {
+			AbstractButton b = e.nextElement();
+			if (b.getText().equals(texto)) {
+				b.setSelected(true);
+				break;
+			}
+		}
 	}
 }
