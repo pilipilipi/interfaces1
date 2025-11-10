@@ -4,21 +4,34 @@ public class FacturaClase {
 
 	private String asunto;
 	private int dia, mes, anyo;
+	private double cantidad;
 	private String tipo;
 	private String fecha;
 
-	public FacturaClase(String asunto, int dia, int mes, int anyo, String tipo) {
+	public FacturaClase(String asunto, int dia, int mes, int anyo, double cantidad, String tipo) {
 		this.asunto = asunto;
-		this.tipo = tipo;
 		this.dia = dia;
 		this.mes = mes;
 		this.anyo = anyo;
+		this.tipo = tipo;
+		this.cantidad = cantidad;
 		this.fecha = this.dia + "/" + this.mes + "/" + this.anyo;
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		FacturaClase other = (FacturaClase) obj;
+		return this.asunto.equals(other.asunto) && this.dia == other.dia && this.mes == other.mes
+				&& this.anyo == other.anyo && this.tipo.equals(other.tipo);
+	}
+
+	@Override
 	public String toString() {
-		return asunto + ":" + tipo + ":" + fecha;
+		return asunto + ":" + tipo + ":" + cantidad + ":" + fecha;
 	}
 
 	public String getAsunto() {
@@ -59,6 +72,14 @@ public class FacturaClase {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+
+	public double getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(double cantidad) {
+		this.cantidad = cantidad;
 	}
 
 	public String getFecha() {
