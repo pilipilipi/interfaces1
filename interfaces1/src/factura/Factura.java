@@ -1,0 +1,237 @@
+package factura;
+
+import java.awt.EventQueue;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.JSpinner;
+import javax.swing.JComboBox;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import java.awt.Font;
+import java.awt.Color;
+
+public class Factura extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private double cantNum;
+	private JPanel contentPane;
+	private JTextField asuntoTxt;
+	private JTextField cantTxt;
+	private DefaultListModel<FacturaClase> modeloLista = new DefaultListModel<>();
+	private JList<FacturaClase> lista = new JList<>(modeloLista);
+	JComboBox<String> tipoOp = new JComboBox<>(new String[] { "Empresas", "Particulares" });
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Factura frame = new Factura();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Factura() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 335);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		JLabel asunto = new JLabel("Asunto:");
+		asunto.setHorizontalAlignment(SwingConstants.LEFT);
+		asunto.setBounds(23, 11, 46, 14);
+		contentPane.add(asunto);
+
+		JLabel fecha = new JLabel("Fecha:");
+		fecha.setHorizontalAlignment(SwingConstants.LEFT);
+		fecha.setBounds(23, 36, 46, 14);
+		contentPane.add(fecha);
+
+		JLabel cant = new JLabel("Cantidad:");
+		cant.setHorizontalAlignment(SwingConstants.LEFT);
+		cant.setBounds(23, 61, 93, 14);
+		contentPane.add(cant);
+
+		JLabel tipo = new JLabel("Tipo:");
+		tipo.setHorizontalAlignment(SwingConstants.LEFT);
+		tipo.setBounds(23, 86, 46, 14);
+		contentPane.add(tipo);
+
+		asuntoTxt = new JTextField();
+		asuntoTxt.setBounds(114, 8, 86, 20);
+		contentPane.add(asuntoTxt);
+		asuntoTxt.setColumns(10);
+
+		JSpinner dia = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
+		dia.setBounds(114, 33, 86, 20);
+		contentPane.add(dia);
+
+		JSpinner mes = new JSpinner(new SpinnerNumberModel(1, 1, 12, 1));
+		mes.setBounds(210, 33, 86, 20);
+		contentPane.add(mes);
+
+		JSpinner anyo = new JSpinner(new SpinnerNumberModel(2020, 2020, 2025, 1));
+		anyo.setBounds(306, 33, 86, 20);
+		contentPane.add(anyo);
+
+		cantTxt = new JTextField();
+		cantTxt.setBounds(114, 58, 86, 20);
+		contentPane.add(cantTxt);
+		cantTxt.setColumns(10);
+
+		tipoOp.setBounds(114, 83, 86, 20);
+		contentPane.add(tipoOp);
+
+		lista.setBounds(23, 111, 273, 139);
+		contentPane.add(lista);
+
+		JButton anyadir = new JButton("Añadir/Actualizaer");
+		anyadir.setBounds(306, 111, 118, 39);
+		contentPane.add(anyadir);
+
+		JButton eliminar = new JButton("Eliminar");
+		eliminar.setBounds(306, 211, 118, 39);
+		contentPane.add(eliminar);
+
+		JButton editar = new JButton("Editar");
+		editar.setBounds(306, 161, 118, 39);
+		contentPane.add(editar);
+
+		JLabel maxCaracteres = new JLabel("El asunto debe tener entre 1 y 10 caracteres");
+		maxCaracteres.setForeground(new Color(255, 6, 94));
+		maxCaracteres.setFont(new Font("Tahoma", Font.BOLD, 11));
+		maxCaracteres.setHorizontalAlignment(SwingConstants.CENTER);
+		maxCaracteres.setBounds(23, 271, 401, 14);
+		contentPane.add(maxCaracteres);
+
+		anyadir.addActionListener(e -> {
+			if (!validarAsunto(asuntoTxt.getText())) {
+				return;
+			}
+			
+			if (!validarFecha((int) dia.getValue(), (int) mes.getValue())) {
+				return;
+			}
+
+			try {
+				cantNum = Double.parseDouble(cantTxt.getText());
+				if(!validarCantidad(cantNum)) {
+					return;
+				}
+			} catch (Exception ex) {
+				ex.getStackTrace();
+			};
+			
+			FacturaClase f = new FacturaClase(asuntoTxt.getText(), (int) dia.getValue(), (int) mes.getValue(), (int) anyo.getValue(), (String) tipoOp.getSelectedItem());
+			if(!validarRepetido(f)) {
+				return;
+			}
+			modeloLista.addElement(f);
+		});
+		
+		editar.addActionListener(e -> {
+			FacturaClase f = new FacturaClase(asuntoTxt.getText(), (int) dia.getValue(), (int) mes.getValue(), (int) anyo.getValue(), (String) tipoOp.getSelectedItem());
+			if(!validarCoincidir(f)) {
+				return;
+			}
+			
+			
+			modeloLista.addElement(f);
+		});
+	}
+
+	private boolean validarAsunto(String asunto) {
+		if (asuntoTxt.getText().length() > 10 || asuntoTxt.getText().length() < 1) {
+			JOptionPane.showMessageDialog(null, "El asunto debe tener entre 1 y 10 caracteres");
+			return false;
+		}
+		return true;
+	}
+
+	private boolean validarFecha(int dia, int mes) {
+		switch (mes) {
+		case 1, 3, 5, 7, 8, 10, 12:
+			if (dia > 31 || dia < 1) {
+				JOptionPane.showMessageDialog(null, "El día debe estar entre 1 y 31");
+				return false;
+			}
+			break;
+
+		case 4, 6, 9, 11:
+			if (dia > 30 || dia < 1) {
+				JOptionPane.showMessageDialog(null, "El día debe estar entre 1 y 30");
+				return false;
+			}
+			break;
+
+		case 2:
+			if (dia > 28 || dia < 1) {
+				JOptionPane.showMessageDialog(null, "El día debe estar entre 1 y 28");
+				return false;
+			}
+			break;
+
+		default:
+			JOptionPane.showMessageDialog(null, "Fecha errónea");
+			return false;
+		}
+		return true;
+	};
+
+	private boolean validarCantidad(double c) {
+
+		if (c < 0) {
+			JOptionPane.showMessageDialog(null, "La cantidad debe ser mayor que 0");
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean validarRepetido(FacturaClase f) {
+		
+		for(int i = 0; i < modeloLista.getSize(); i++) {
+			if(f.getAsunto().equals(modeloLista.getElementAt(i).getAsunto())) {
+				JOptionPane.showMessageDialog(null, "Asunto repetido");
+				return false;
+			}
+		}		
+		return true;
+	}
+	
+	private boolean validarCoincidir(FacturaClase f) {
+		for(int i = 0; i < modeloLista.getSize(); i++) {
+			if(f.equals(modeloLista.getElementAt(i))) {
+				modeloLista.removeElement(i);
+				return true;
+			}
+		}
+
+		JOptionPane.showMessageDialog(null, "Factura no encontrada");
+		return false;
+	}
+}

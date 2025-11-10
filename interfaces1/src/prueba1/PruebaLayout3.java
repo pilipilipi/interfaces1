@@ -67,7 +67,7 @@ public class PruebaLayout3 extends JFrame {
 
 			if (ganador()) {
 				if (!turno) {
-					JOptionPane.showMessageDialog(null, "Rojo gana!");
+					JOptionPane.showMessageDialog(null, "Rosa gana!");
 					System.exit(0);
 
 				} else {
